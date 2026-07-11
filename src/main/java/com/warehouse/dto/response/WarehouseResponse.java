@@ -15,10 +15,4 @@ public class WarehouseResponse {
     private String address;
     private LocalDateTime createdAt;
 
-    public WarehouseResponse(Long id, String name, String address, LocalDateTime createdAt) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.createdAt = createdAt;
-    }
 }

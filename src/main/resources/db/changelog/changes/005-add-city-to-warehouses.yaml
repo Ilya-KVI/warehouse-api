@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-add-city-to-warehouses
+      author: dev
+
+      changes:
+        - addColumn:
+            tableName: warehouses
+            columns:
+              - column:
+                  name: city
+                  type: VARCHAR(255)
