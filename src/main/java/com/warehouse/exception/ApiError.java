@@ -8,6 +8,7 @@ public class ApiError {
     private int status;
     private String error;
     private String message;
+    private String path;
 
     public ApiError(LocalDateTime timestamp, int status, String error, String message) {
         this.timestamp = timestamp;

@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 003-create-warehouses-table
-      author: dev
+      author: developer
 
       changes:
         - createTable:

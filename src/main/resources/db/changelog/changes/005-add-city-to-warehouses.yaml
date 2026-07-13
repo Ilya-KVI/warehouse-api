@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 005-add-city-to-warehouses
-      author: dev
+      author: developer
 
       changes:
         - addColumn:

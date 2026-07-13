@@ -10,14 +10,27 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: BIGSERIAL
+                  type: BIGINT
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
 
               - column:
-                  name: username
+                  name: first_name
                   type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: last_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: email
+                  type: VARCHAR(255)
                   constraints:
                     nullable: false
                     unique: true
@@ -35,7 +48,21 @@ databaseChangeLog:
                     nullable: false
 
               - column:
+                  name: enabled
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+
+              - column:
                   name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_at
                   type: TIMESTAMP
                   defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:

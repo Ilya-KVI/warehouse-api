@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 3
-      author: ilya
+      author: developer
 
       changes:
         - createTable:
