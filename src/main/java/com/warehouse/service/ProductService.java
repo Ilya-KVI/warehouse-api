@@ -2,9 +2,9 @@ package com.warehouse.service;
 
 import com.warehouse.dto.request.ProductRequest;
 import com.warehouse.dto.response.ProductResponse;
+import com.warehouse.entity.ProductEntity;
 import com.warehouse.exception.DuplicateSkuException;
 import com.warehouse.exception.ProductNotFoundException;
-import com.warehouse.entity.ProductEntity;
 import com.warehouse.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +21,10 @@ public class ProductService {
 
     public ProductResponse create(ProductRequest request) {
 
-        productRepository.findBySku(request.getSku()).ifPresent(product -> {throw new DuplicateSkuException(request.getSku());
-        });
+        productRepository.findBySku(request.getSku())
+                .ifPresent(product -> {
+                    throw new DuplicateSkuException(request.getSku());
+                });
 
         ProductEntity product = new ProductEntity();
         product.setName(request.getName());
@@ -35,7 +37,30 @@ public class ProductService {
         return mapToResponse(saved);
     }
 
+    public ProductResponse update(Long id, ProductRequest request) {
+
+        ProductEntity product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+
+        productRepository.findBySku(request.getSku())
+                .ifPresent(existing -> {
+                    if (!existing.getId().equals(id)) {
+                        throw new DuplicateSkuException(request.getSku());
+                    }
+                });
+
+        product.setName(request.getName());
+        product.setDescription(request.getDescription());
+        product.setPrice(request.getPrice());
+        product.setSku(request.getSku());
+
+        ProductEntity saved = productRepository.save(product);
+
+        return mapToResponse(saved);
+    }
+
     public ProductResponse getById(Long id) {
+
         ProductEntity product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
@@ -43,6 +68,7 @@ public class ProductService {
     }
 
     public List<ProductResponse> getAll() {
+
         return productRepository.findAll()
                 .stream()
                 .map(this::mapToResponse)
@@ -50,10 +76,15 @@ public class ProductService {
     }
 
     public void delete(Long id) {
-        productRepository.deleteById(id);
+
+        ProductEntity product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+
+        productRepository.delete(product);
     }
 
     private ProductResponse mapToResponse(ProductEntity product) {
+
         return new ProductResponse(
                 product.getId(),
                 product.getName(),

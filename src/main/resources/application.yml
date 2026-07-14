@@ -23,3 +23,7 @@ spring:
 
 server:
   port: 8080
+
+jwt:
+  secret: mySuperSecretKeyForWarehouseApiProject2026MySuperSecretKey
+  expiration: 86400000

@@ -2,15 +2,17 @@ package com.warehouse.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class LoginRequest {
 
-    @Email(message = "Некорректный email")
-    @NotBlank(message = "Email обязателен")
+    @Email
+    @NotBlank
     private String email;
 
-    @NotBlank(message = "Пароль обязателен")
+    @NotBlank
     private String password;
 }

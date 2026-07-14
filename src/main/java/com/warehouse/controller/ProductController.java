@@ -4,6 +4,8 @@ import com.warehouse.dto.request.ProductRequest;
 import com.warehouse.dto.response.ProductResponse;
 import com.warehouse.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -20,9 +22,19 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @PutMapping("/{id}")
+    public ProductResponse update(
+            @PathVariable Long id,
+            @Valid @RequestBody ProductRequest request
+    ) {
+        return productService.update(id, request);
+    }
+
     @PostMapping
-    public ProductResponse create(@Valid @RequestBody ProductRequest request) {
-        return productService.create(request);
+    public ResponseEntity<ProductResponse> create(
+            @Valid @RequestBody ProductRequest request) {
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.create(request));
     }
 
     @GetMapping("/{id}")
