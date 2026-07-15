@@ -5,6 +5,7 @@ import com.warehouse.dto.response.ProductResponse;
 import com.warehouse.entity.ProductEntity;
 import com.warehouse.exception.DuplicateSkuException;
 import com.warehouse.exception.ProductNotFoundException;
+import com.warehouse.mapper.ProductMapper;
 import com.warehouse.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,12 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+                          ProductMapper productMapper) {
         this.productRepository = productRepository;
+        this.productMapper = productMapper;
     }
 
     public ProductResponse create(ProductRequest request) {
@@ -26,15 +30,11 @@ public class ProductService {
                     throw new DuplicateSkuException(request.getSku());
                 });
 
-        ProductEntity product = new ProductEntity();
-        product.setName(request.getName());
-        product.setDescription(request.getDescription());
-        product.setPrice(request.getPrice());
-        product.setSku(request.getSku());
+        ProductEntity product = productMapper.toEntity(request);
 
         ProductEntity saved = productRepository.save(product);
 
-        return mapToResponse(saved);
+        return productMapper.toResponse(saved);
     }
 
     public ProductResponse update(Long id, ProductRequest request) {
@@ -49,14 +49,11 @@ public class ProductService {
                     }
                 });
 
-        product.setName(request.getName());
-        product.setDescription(request.getDescription());
-        product.setPrice(request.getPrice());
-        product.setSku(request.getSku());
+        productMapper.updateEntity(request, product);
 
         ProductEntity saved = productRepository.save(product);
 
-        return mapToResponse(saved);
+        return productMapper.toResponse(saved);
     }
 
     public ProductResponse getById(Long id) {
@@ -64,14 +61,14 @@ public class ProductService {
         ProductEntity product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        return mapToResponse(product);
+        return productMapper.toResponse(product);
     }
 
     public List<ProductResponse> getAll() {
 
         return productRepository.findAll()
                 .stream()
-                .map(this::mapToResponse)
+                .map(productMapper::toResponse)
                 .toList();
     }
 
@@ -81,18 +78,5 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
         productRepository.delete(product);
-    }
-
-    private ProductResponse mapToResponse(ProductEntity product) {
-
-        return new ProductResponse(
-                product.getId(),
-                product.getName(),
-                product.getDescription(),
-                product.getPrice(),
-                product.getSku(),
-                product.getCreatedAt(),
-                product.getUpdatedAt()
-        );
     }
 }
