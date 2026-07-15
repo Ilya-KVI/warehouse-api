@@ -3,32 +3,16 @@ package com.warehouse.mapper;
 import com.warehouse.dto.request.CategoryRequest;
 import com.warehouse.dto.response.CategoryResponse;
 import com.warehouse.entity.CategoryEntity;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
-@Component
-public class CategoryMapper {
+@Mapper(componentModel = "spring")
+public interface CategoryMapper {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    CategoryEntity toEntity(CategoryRequest request);
 
-    public CategoryEntity toEntity(CategoryRequest request) {
+    CategoryResponse toResponse(CategoryEntity entity);
 
-        CategoryEntity entity = new CategoryEntity();
-
-        entity.setName(request.getName());
-        entity.setDescription(request.getDescription());
-
-        return entity;
-    }
-
-    public CategoryResponse toResponse(CategoryEntity entity) {
-
-        return new CategoryResponse(
-                entity.getId(),
-                entity.getName(),
-                entity.getDescription()
-        );
-    }
+    void updateEntity(CategoryRequest request,
+                      @MappingTarget CategoryEntity entity);
 }

@@ -17,22 +17,21 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(
+            @Valid @RequestBody RegisterRequest request) {
+
+        authService.register(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
-            @Valid @RequestBody LoginRequest request
-            ) {
+            @Valid @RequestBody LoginRequest request) {
 
         String token = authService.login(request);
 
-        return ResponseEntity.ok(
-                new AuthResponse(token)
-        );
-    }
-
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void register(@Valid @RequestBody RegisterRequest request) {
-
-        authService.register(request);
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 }
