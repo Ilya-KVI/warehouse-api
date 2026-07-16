@@ -5,6 +5,9 @@ import com.warehouse.dto.response.ProductResponse;
 import com.warehouse.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +41,11 @@ public class ProductController {
         return ResponseEntity.ok(productService.update(id, request));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Page<ProductResponse>> search(@RequestParam String name, Pageable pageable) {
+        return ResponseEntity.ok(productService.search(name, pageable));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getById(@PathVariable Long id) {
 
@@ -45,10 +53,11 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getAll() {
+    public ResponseEntity<Page<ProductResponse>> getAll(Pageable pageable) {
 
-        return ResponseEntity.ok(productService.getAll());
+        return ResponseEntity.ok(productService.getAll(pageable));
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

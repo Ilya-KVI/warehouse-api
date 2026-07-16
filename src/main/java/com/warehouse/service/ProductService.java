@@ -8,6 +8,8 @@ import com.warehouse.exception.ProductNotFoundException;
 import com.warehouse.mapper.ProductMapper;
 import com.warehouse.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -21,6 +23,10 @@ public class ProductService {
                           ProductMapper productMapper) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+    }
+
+    public Page<ProductResponse> getAll(Pageable pageable) {
+        return productRepository.findAll(pageable).map(productMapper::toResponse);
     }
 
     public ProductResponse create(ProductRequest request) {
@@ -56,20 +62,16 @@ public class ProductService {
         return productMapper.toResponse(saved);
     }
 
+    public Page<ProductResponse> search(String name, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCase(name, pageable).map(productMapper::toResponse);
+    }
+
     public ProductResponse getById(Long id) {
 
         ProductEntity product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
         return productMapper.toResponse(product);
-    }
-
-    public List<ProductResponse> getAll() {
-
-        return productRepository.findAll()
-                .stream()
-                .map(productMapper::toResponse)
-                .toList();
     }
 
     public void delete(Long id) {

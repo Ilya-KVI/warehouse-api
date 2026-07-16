@@ -67,6 +67,42 @@ public class SecurityConfig {
                                 "/api/products/**"
                         ).hasRole("ADMIN")
 
+                        .requestMatchers(HttpMethod.GET, "/api/categories/**")
+                        .hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/categories/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/categories/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/categories/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/api/warehouses/**")
+                        .hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/warehouses/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/warehouses/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/warehouses/**"
+                        ).hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
 
