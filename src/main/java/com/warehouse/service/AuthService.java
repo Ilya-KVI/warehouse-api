@@ -8,7 +8,6 @@ import com.warehouse.exception.UserAlreadyExistsException;
 import com.warehouse.repository.UserRepository;
 import com.warehouse.security.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.service.RequestBodyService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,8 +21,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-
-    private final RequestBodyService requestBodyBuilder;
 
     public String login(LoginRequest request) {
 

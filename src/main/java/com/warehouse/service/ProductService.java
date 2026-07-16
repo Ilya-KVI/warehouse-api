@@ -10,6 +10,7 @@ import com.warehouse.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class ProductService {
         return productRepository.findAll(pageable).map(productMapper::toResponse);
     }
 
+    @Transactional
     public ProductResponse create(ProductRequest request) {
 
         productRepository.findBySku(request.getSku())
@@ -43,6 +45,7 @@ public class ProductService {
         return productMapper.toResponse(saved);
     }
 
+    @Transactional
     public ProductResponse update(Long id, ProductRequest request) {
 
         ProductEntity product = productRepository.findById(id)
@@ -74,6 +77,7 @@ public class ProductService {
         return productMapper.toResponse(product);
     }
 
+    @Transactional
     public void delete(Long id) {
 
         ProductEntity product = productRepository.findById(id)
