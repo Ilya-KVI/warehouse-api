@@ -48,8 +48,7 @@ public class ProductService {
     @Transactional
     public ProductResponse update(Long id, ProductRequest request) {
 
-        ProductEntity product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        ProductEntity product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
 
         productRepository.findBySku(request.getSku())
                 .ifPresent(existing -> {

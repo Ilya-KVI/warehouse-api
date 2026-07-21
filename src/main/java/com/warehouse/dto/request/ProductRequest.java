@@ -20,8 +20,10 @@ public class ProductRequest {
     @NotBlank
     private String sku;
 
+
     public ProductRequest() {
     }
+
 
     public String getName() {
         return name;
@@ -30,6 +32,7 @@ public class ProductRequest {
     public void setName(String name) {
         this.name = name;
     }
+
 
     public String getDescription() {
         return description;
@@ -46,6 +49,7 @@ public class ProductRequest {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
 
     public String getSku() {
         return sku;

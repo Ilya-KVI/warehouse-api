@@ -13,5 +13,6 @@ public interface ProductMapper {
 
     ProductResponse toResponse(ProductEntity entity);
 
-    void updateEntity(ProductRequest request, @MappingTarget ProductEntity entity);
+    void updateEntity(ProductRequest request,
+                      @MappingTarget ProductEntity entity);
 }

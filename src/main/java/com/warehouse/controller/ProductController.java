@@ -13,12 +13,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Products", description = "Product API")
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
+
 
     private final ProductService productService;
 
@@ -31,6 +33,7 @@ public class ProductController {
                 .body(productService.create(request));
     }
 
+
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> update(
             @PathVariable Long id,
@@ -39,16 +42,19 @@ public class ProductController {
         return ResponseEntity.ok(productService.update(id, request));
     }
 
+
     @GetMapping("/search")
     public ResponseEntity<Page<ProductResponse>> search(@RequestParam String name, Pageable pageable) {
         return ResponseEntity.ok(productService.search(name, pageable));
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getById(@PathVariable Long id) {
 
         return ResponseEntity.ok(productService.getById(id));
     }
+
 
     @GetMapping
     public ResponseEntity<Page<ProductResponse>> getAll(Pageable pageable) {

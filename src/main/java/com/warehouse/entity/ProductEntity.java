@@ -15,20 +15,21 @@ import lombok.*;
 @Table(name = "products")
 public class ProductEntity {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String name;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal price;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true, length = 50)
     private String sku;
 
     private LocalDateTime createdAt;
@@ -44,6 +45,4 @@ public class ProductEntity {
     public void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
-
 }
