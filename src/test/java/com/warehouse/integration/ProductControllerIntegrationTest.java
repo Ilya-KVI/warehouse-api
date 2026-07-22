@@ -2,19 +2,11 @@ package com.warehouse.integration;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.warehouse.entity.Role;
-import com.warehouse.entity.UserEntity;
-import com.warehouse.repository.UserRepository;
 import com.warehouse.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.BeforeEach;
 
 
@@ -27,113 +19,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-class ProductControllerIntegrationTest {
+class ProductControllerIntegrationTest extends BaseIntegrationTest {
 
-
-    @Autowired
-    private MockMvc mockMvc;
-
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private ProductRepository productRepository;
 
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-
     @BeforeEach
     void cleanDatabase() {
         productRepository.deleteAll();
-        userRepository.deleteAll();
     }
-
-
-    private void createAdmin() {
-
-
-        if(userRepository.existsByEmail("admin@test.com")){
-            return;
-        }
-
-
-        UserEntity admin = UserEntity.builder()
-                .firstName("Admin")
-                .lastName("Admin")
-                .email("admin@test.com")
-                .password(passwordEncoder.encode("password123"))
-                .role(Role.ROLE_ADMIN)
-                .build();
-
-
-        userRepository.save(admin);
-    }
-
-
-
-    private void createUser() {
-
-
-        if(userRepository.existsByEmail("user@test.com")){
-            return;
-        }
-
-
-        UserEntity user = UserEntity.builder()
-                .firstName("User")
-                .lastName("User")
-                .email("user@test.com")
-                .password(passwordEncoder.encode("password123"))
-                .role(Role.ROLE_USER)
-                .build();
-
-
-        userRepository.save(user);
-    }
-
-
-
-    private String login(String email) throws Exception {
-
-
-        String request = """
-                {
-                    "email": "%s",
-                    "password": "password123"
-                }
-                """.formatted(email);
-
-
-
-        MvcResult result = mockMvc.perform(post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
-                .andExpect(status().isOk())
-                .andReturn();
-
-
-
-        JsonNode json = objectMapper.readTree(
-                result.getResponse().getContentAsString()
-        );
-
-
-        return json.get("token").asText();
-    }
-
-
-
-
 
 
     @Test
@@ -187,11 +83,6 @@ class ProductControllerIntegrationTest {
     }
 
 
-
-
-
-
-
     @Test
     void createProduct_asUser_shouldReturn403() throws Exception {
 
@@ -223,12 +114,6 @@ class ProductControllerIntegrationTest {
                         .content(productRequest))
                 .andExpect(status().isForbidden());
     }
-
-
-
-
-
-
 
 
     @Test
@@ -339,7 +224,7 @@ class ProductControllerIntegrationTest {
         );
 
 
-        Long productId = createdProduct.get("id").asLong();
+        long productId = createdProduct.get("id").asLong();
 
 
         mockMvc.perform(get("/api/products/" + productId)
@@ -389,7 +274,7 @@ class ProductControllerIntegrationTest {
         );
 
 
-        Long productId = createdProduct.get("id").asLong();
+        long productId = createdProduct.get("id").asLong();
 
 
         mockMvc.perform(delete("/api/products/" + productId)
@@ -443,7 +328,7 @@ class ProductControllerIntegrationTest {
         );
 
 
-        Long productId = createdProduct.get("id").asLong();
+        long productId = createdProduct.get("id").asLong();
 
 
 
